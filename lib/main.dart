@@ -1,74 +1,54 @@
-import 'package:cabdriver/providers/app_provider.dart';
-import 'package:cabdriver/providers/user.dart';
-import 'package:cabdriver/screens/login.dart';
-import 'package:cabdriver/screens/splash.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'helpers/constants.dart';
-import 'locators/service_locator.dart';
-import 'screens/home.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'flutter_flow/flutter_flow_theme.dart';
+import 'flutter_flow/flutter_flow_util.dart';
+import 'flutter_flow/internationalization.dart';
+import 'index.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  setupLocator();
 
-  return runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider<AppStateProvider>.value(
-        value: AppStateProvider(),
-      ),
-      ChangeNotifierProvider.value(value: UserProvider.initialize()),
-    ],
-    child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(primaryColor: Colors.deepOrange),
-        title: "Flutter Taxi",
-        home: MyApp()),
-  ));
+  await FlutterFlowTheme.initialize();
+
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+
+  static _MyAppState of(BuildContext context) =>
+      context.findAncestorStateOfType<_MyAppState>();
+}
+
+class _MyAppState extends State<MyApp> {
+  Locale _locale;
+  ThemeMode _themeMode = FlutterFlowTheme.themeMode;
+
+  void setLocale(Locale value) => setState(() => _locale = value);
+  void setThemeMode(ThemeMode mode) => setState(() {
+        _themeMode = mode;
+        FlutterFlowTheme.saveThemeMode(mode);
+      });
+
   @override
   Widget build(BuildContext context) {
-    UserProvider auth = Provider.of<UserProvider>(context);
-
-    return FutureBuilder(
-      // Initialize FlutterFire:
-      future: initialization,
-      builder: (context, snapshot) {
-        // Check for errors
-        if (snapshot.hasError) {
-          return Scaffold(
-            body: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [Text("Something went wrong")],
-            ),
-          );
-        }
-
-        // Once complete, show your application
-        if (snapshot.connectionState == ConnectionState.done) {
-          switch (auth.status) {
-            case Status.Uninitialized:
-              return Splash();
-            case Status.Unauthenticated:
-            case Status.Authenticating:
-              return LoginScreen();
-            case Status.Authenticated:
-              return MyHomePage();
-            default:
-              return LoginScreen();
-          }
-        }
-
-        // Otherwise, show something whilst waiting for initialization to complete
-        return Scaffold(
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [CircularProgressIndicator()],
-          ),
-        );
-      },
+    return MaterialApp(
+      title: 'taxi-driver-app',
+      localizationsDelegates: [
+        FFLocalizationsDelegate(),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      locale: _locale,
+      supportedLocales: const [Locale('en', '')],
+      theme: ThemeData(brightness: Brightness.light),
+      darkTheme: ThemeData(brightness: Brightness.dark),
+      themeMode: _themeMode,
+      home: HomePageWidget(),
     );
   }
 }
