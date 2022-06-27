@@ -1,31 +1,10 @@
-# taxi-driver-app
-
-A new Flutter project.
+# Flutter Uber Clone / Taxi App (DRIVER APP)
+![](images/thumb.jpg)
 
 ## Getting Started
 
-FlutterFlow projects are built to run on the Flutter _stable_ release.
+Get the apk for this project at this [link](https://flutter.io/docs/get-started/codelab)
 
-### IMPORTANT:
-
-For projects with Firestore integration, you must first run the following commands to ensure the project compiles:
-
-```
-flutter pub get
-flutter packages pub run build_runner build --delete-conflicting-outputs
-```
-
-This command creates the generated files that parse each Record from Firestore into a schema object.
-
-### Getting started continued:
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+There are mainly two aspects to consider in order to have this project working:
+1. Don't forget to add your own google maps api into the androidmanifest.xml file
+2. This is not requered but you can conect the project to your firebase project by chamging the google-services.json file
